@@ -6,7 +6,10 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
-      "args": ["test", "--project=chromium"],
+      "args": [
+        "test",
+        "--project=chromium"
+      ],
       "env": {
         "BASE_URL": "https://www.thriftbooks.com",
         "WORKS_PATH": "/w/into-the-wild_jon-krakauer/245729"
@@ -18,7 +21,11 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
-      "args": ["test", "tests/works-to-checkout.spec.js", "--project=chromium"],
+      "args": [
+        "test",
+        "tests/works-to-checkout.spec.js",
+        "--project=chromium"
+      ],
       "env": {
         "BASE_URL": "https://www.thriftbooks.com",
         "WORKS_PATH": "/w/into-the-wild_jon-krakauer/245729",
@@ -31,7 +38,13 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
-      "args": ["test", "tests/works-to-checkout.spec.js", "--project=chromium", "--headed", "--workers=1"],
+      "args": [
+        "test",
+        "tests/works-to-checkout.spec.js",
+        "--project=chromium",
+        "--headed",
+        "--workers=1"
+      ],
       "env": {
         "BASE_URL": "https://www.thriftbooks.com",
         "WORKS_PATH": "/w/into-the-wild_jon-krakauer/245729"

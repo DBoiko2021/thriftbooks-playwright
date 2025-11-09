@@ -8,8 +8,8 @@ module.exports = defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: [['html'], ['junit', { outputFile: 'results/junit.xml' }]],
   use: {
-    headless: false,           // ← показывать окно браузера
-    launchOptions: { slowMo: 300 }, // ← замедлить шаги для наглядности
+    headless: false,
+    launchOptions: { slowMo: 300 },
     baseURL,
     trace: process.env.CI ? 'on-first-retry' : 'retain-on-failure',
     screenshot: 'only-on-failure',

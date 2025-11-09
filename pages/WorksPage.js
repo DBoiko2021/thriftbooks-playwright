@@ -25,7 +25,7 @@ class WorksPage {
       if (await this.closeDialogBtn.isVisible()) {
         await this.closeDialogBtn.click();
       }
-    } catch {}
+    } catch { }
   }
 
   async addToCart() {
