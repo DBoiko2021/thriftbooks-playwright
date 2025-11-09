@@ -6,3 +6,11 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+tests/tmp-*.spec.js
+tmp-*.spec.js
+results/
+test-results/
+playwright-report/
+*.webm
+*.png
+*.zip
