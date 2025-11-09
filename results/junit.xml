@@ -1,0 +1,6 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="10.313083">
+<testsuite name="works-to-checkout.spec.js" timestamp="2025-11-09T00:31:28.664Z" hostname="chromium" tests="1" failures="0" skipped="0" time="8.187" errors="0">
+<testcase name="works → cart → checkout (minimal)" classname="works-to-checkout.spec.js" time="8.187">
+</testcase>
+</testsuite>
+</testsuites>

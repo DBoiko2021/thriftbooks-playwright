@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run all tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
+      "args": ["test", "--project=chromium"],
+      "env": {
+        "BASE_URL": "https://www.thriftbooks.com",
+        "WORKS_PATH": "/w/into-the-wild_jon-krakauer/245729"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Headed + Inspector",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
+      "args": ["test", "tests/works-to-checkout.spec.js", "--project=chromium"],
+      "env": {
+        "BASE_URL": "https://www.thriftbooks.com",
+        "WORKS_PATH": "/w/into-the-wild_jon-krakauer/245729",
+        "PWDEBUG": "1"
+      },
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Headed no debug",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/@playwright/test/cli.js",
+      "args": ["test", "tests/works-to-checkout.spec.js", "--project=chromium", "--headed", "--workers=1"],
+      "env": {
+        "BASE_URL": "https://www.thriftbooks.com",
+        "WORKS_PATH": "/w/into-the-wild_jon-krakauer/245729"
+      },
+      "console": "integratedTerminal"
+    }
+  ]
+}
