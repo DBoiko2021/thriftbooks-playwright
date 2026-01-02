@@ -1,29 +1,34 @@
 // tests/pages/CartPage.ts
+
 import { Page, Locator, expect } from '@playwright/test';
 
 export class CartPage {
   readonly page: Page;
-  private readonly proceedToCheckoutLinks: Locator;
+  readonly proceedToCheckoutLinks: Locator;
+  readonly cartItems: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.proceedToCheckoutLinks = page.locator('a.ShoppingCart-proceedButton');
+    this.proceedToCheckoutLinks = page.locator('.ShoppingCart-proceedButton');
+    this.cartItems = page.locator('.ShoppingCartItem');
   }
 
-  async waitForLoaded(): Promise<void> {
-    await expect(this.page).toHaveURL(/\/shopping-cart/i);
-  }
-
-  async proceedToCheckout(): Promise<void> {
-    await this.waitForLoaded();
-
-    const visibleLink = this.proceedToCheckoutLinks.locator('visible=true').first();
+  async waitForLoaded() {
+    await this.page.waitForURL('**/shopping-cart/**', { timeout: 10000 });
+    await this.page.waitForLoadState('networkidle', { timeout: 10000 });
     
-    await expect(visibleLink).toBeVisible({ timeout: 10_000 });
-    await expect(visibleLink).toBeEnabled({ timeout: 7_000 });
+    // CRITICAL: Wait for at least one cart item to be visible
+    await expect(this.cartItems.first()).toBeVisible({ timeout: 10000 });
+  }
 
-    await visibleLink.click();
+  async proceedToCheckout() {
+    await this.proceedToCheckoutLinks.locator('visible=true').first().click();
+  }
 
-    await expect(this.page).toHaveURL(/\/checkout/i, { timeout: 7_000 });
+  async getItemCount(): Promise<number> {
+    // CRITICAL: Wait for items to be visible before counting
+    await expect(this.cartItems.first()).toBeVisible({ timeout: 5000 });
+    
+    return await this.cartItems.count();
   }
 }

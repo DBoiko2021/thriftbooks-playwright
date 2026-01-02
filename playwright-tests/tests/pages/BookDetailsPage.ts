@@ -30,8 +30,11 @@ export class BookDetailsPage {
   }
 
   async waitForLoaded() {
-    await expect(this.formatButtons.first()).toBeVisible({ timeout: 10_000 });
-    await expect(this.conditionButtons.first()).toBeVisible({ timeout: 10_000 });
+    await this.page.waitForLoadState('networkidle');
+    await Promise.all([
+      expect(this.formatButtons.first()).toBeVisible(),
+      expect(this.conditionButtons.first()).toBeVisible(),
+    ]);
   }
 
   private async isOneLeft(): Promise<boolean> {
@@ -51,11 +54,17 @@ export class BookDetailsPage {
     for (let i = 0; i < count; i++) {
       const btn = buttons.nth(i);
 
-      const isInteractable = await btn.isVisible() && await btn.isEnabled();
-      if (!isInteractable) continue;
+      const isVisible = await btn.isVisible().catch(() => false);
+      const isEnabled = await btn.isEnabled().catch(() => false);
+      
+      if (!isVisible || !isEnabled) {
+        continue;
+      }
 
-      await btn.click({ timeout: 10_000 });
-      await this.page.waitForTimeout(150);
+      await btn.click();
+      
+      // Wait for potential "Only 1 Left" banner to appear
+      await this.page.waitForLoadState('domcontentloaded');
 
       if (!await this.isOneLeft()) {
         return;
@@ -68,18 +77,17 @@ export class BookDetailsPage {
   }
 
   async selectFormatAvoidingOneLeft() {
-    await this.waitForLoaded();
     await this.pickOptionAvoidingOneLeft(this.formatButtons, 'format');
   }
 
   async selectConditionAvoidingOneLeft() {
-    await this.waitForLoaded();
     await this.pickOptionAvoidingOneLeft(this.conditionButtons, 'condition');
   }
 
   async addToCart() {
-    await expect(this.addToCartButton).toBeVisible();
-    await expect(this.addToCartButton).toBeEnabled();
-    await this.addToCartButton.click({ timeout: 10_000 });
+    await expect(this.addToCartButton).toBeVisible({ timeout: 3000 });
+    await expect(this.addToCartButton).toBeEnabled({ timeout: 3000 });
+    await this.addToCartButton.click();
+    await this.page.waitForTimeout(500);
   }
 }

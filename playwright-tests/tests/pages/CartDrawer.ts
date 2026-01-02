@@ -1,10 +1,11 @@
-// tests/pages/CartDrawer.ts
+// playwright-tests/tests/pages/CartDrawer.ts
 import { Page, Locator, expect } from '@playwright/test';
 
 export class CartDrawer {
   readonly page: Page;
   readonly drawerContainer: Locator;
   readonly viewCartButton: Locator;
+  readonly continueShoppingButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -12,25 +13,29 @@ export class CartDrawer {
     this.viewCartButton = this.drawerContainer.locator(
       'a.Button.font14[href="/shopping-cart/"]'
     );
+    // More specific selector based on actual HTML structure
+    this.continueShoppingButton = this.drawerContainer.locator(
+      'button.Button:has-text("Continue Shopping")'
+    );
+  }
+
+  async waitForLoaded() {
+    await expect(this.drawerContainer).toBeVisible();
   }
 
   async goToCartPage() {
-    const target = this.viewCartButton.first();
+    await expect(this.viewCartButton).toBeVisible();
+    await this.viewCartButton.click();
 
-    await expect(target).toBeVisible({ timeout: 10_000 });
-    await expect(target).toBeEnabled();
-
-    await target.click({ timeout: 15_000 });
-
-    const navigated = await this.page
-      .waitForURL('**/shopping-cart*', { timeout: 5_000 })
-      .then(() => true)
-      .catch(() => false);
-
-    if (!navigated) {
-      await this.page.goto('/shopping-cart/', { waitUntil: 'domcontentloaded' });
+    try {
+      await this.page.waitForURL(/\/shopping-cart/, { timeout: 5_000 });
+    } catch {
+      await this.page.goto('/shopping-cart/', { waitUntil: 'networkidle' });
     }
+  }
 
-    await expect(this.page).toHaveURL(/\/shopping-cart/);
+  async continueShopping() {
+    await this.continueShoppingButton.click();
+    await expect(this.drawerContainer).toBeHidden({ timeout: 5000 });
   }
 }

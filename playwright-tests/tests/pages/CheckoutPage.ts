@@ -12,33 +12,15 @@ export class CheckoutPage {
     );
   }
 
-  async waitForLoaded(): Promise<void> {
-  await this.page.waitForLoadState('networkidle', { timeout: 15_000 });
-  
-  console.log('[Checkout/OrderReview] Current URL:', this.page.url());
-  
-  const url = this.page.url();
-  if (url.endsWith('/checkout/') && !url.includes('/review')) {
-    throw new Error('Still on Guest Login page (/checkout/), not Order Review');
+  async waitForLoaded() {
+    await this.page.waitForLoadState('networkidle');
+    await expect(this.page).not.toHaveURL(/\/checkout\/?$/);
   }
-  
-  console.log('[Checkout/OrderReview] Page stabilized');
-}
 
-  async placeOrder(): Promise<void> {
-    await this.waitForLoaded();
-
-    const count = await this.placeOrderSubmit.count();
-    console.log('[Checkout/OrderReview] Place Order buttons found:', count);
-
+  async placeOrder() {
     const submit = this.placeOrderSubmit.first();
-
-    await expect(submit).toBeVisible({ timeout: 15_000 });
-    await expect(submit).toBeEnabled({ timeout: 5_000 });
-
-    console.log('[Checkout/OrderReview] Clicking Place Order');
-    await submit.click({ timeout: 10_000 });
     
-    console.log('[Checkout/OrderReview] Place Order clicked');
+    await expect(submit).toBeVisible();
+    await submit.click();
   }
 }

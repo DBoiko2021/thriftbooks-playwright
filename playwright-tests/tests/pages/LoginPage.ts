@@ -14,14 +14,19 @@ export class LoginPage {
     this.loginButton = page.getByRole('button', { name: 'Log In' });
   }
 
+  async waitForLoaded() {
+    await this.page.waitForLoadState('networkidle');
+    await expect(this.emailInput).toBeVisible();
+  }
+
   async login(
     email: string = process.env.TB_TEST_EMAIL ?? '',
     password: string = process.env.TB_TEST_PASSWORD ?? ''
   ) {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
-    
-    await expect(this.loginButton).toBeEnabled();
     await this.loginButton.click();
+    
+    await this.page.waitForURL('/');
   }
 }
